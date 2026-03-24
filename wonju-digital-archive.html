@@ -1,0 +1,1777 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>원주 문학창의도시 | 시민이 경작한 생명의 서사</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;500;600;700;900&family=Pretendard:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --ink-black: #1a1a1a;
+      --paper-white: #f8f5f0;
+      --hanji-cream: #f5f0e6;
+      --earth-brown: #8b7355;
+      --forest-green: #4a5d4a;
+      --mountain-blue: #5a6e7f;
+      --accent-gold: #c4a962;
+      --soft-shadow: rgba(26, 26, 26, 0.08);
+      --root-color: #8b7355;
+      --stem-color: #4a5d4a;
+      --flower-color: #c4a962;
+      --forest-color: #5a6e7f;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Pretendard', -apple-system, sans-serif;
+      background: var(--paper-white);
+      color: var(--ink-black);
+      line-height: 1.8;
+      overflow-x: hidden;
+    }
+
+    /* Texture Overlay */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+      opacity: 0.03;
+      pointer-events: none;
+      z-index: 9999;
+    }
+
+    /* Hero Section */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      padding: 2rem;
+      background: linear-gradient(180deg, var(--hanji-cream) 0%, var(--paper-white) 100%);
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: 
+        radial-gradient(ellipse at 20% 30%, rgba(196, 169, 98, 0.1) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 70%, rgba(74, 93, 74, 0.08) 0%, transparent 40%);
+    }
+
+    .hero-content {
+      text-align: center;
+      z-index: 1;
+      animation: fadeInUp 1.2s ease-out;
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(40px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .unesco-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 1.2rem;
+      background: var(--ink-black);
+      color: var(--paper-white);
+      font-size: 0.75rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      margin-bottom: 2rem;
+      animation: fadeInUp 1.2s ease-out 0.2s both;
+    }
+
+    .hero-title {
+      font-family: 'Noto Serif KR', serif;
+      font-size: clamp(2.2rem, 7vw, 4.5rem);
+      font-weight: 900;
+      letter-spacing: -0.02em;
+      line-height: 1.3;
+      margin-bottom: 1.5rem;
+      animation: fadeInUp 1.2s ease-out 0.4s both;
+    }
+
+    .hero-title span {
+      display: block;
+      font-weight: 300;
+      font-size: 0.45em;
+      letter-spacing: 0.15em;
+      margin-top: 0.5rem;
+      color: var(--earth-brown);
+    }
+
+    .hero-subtitle {
+      font-size: 1.1rem;
+      color: var(--mountain-blue);
+      max-width: 650px;
+      margin: 0 auto 3rem;
+      animation: fadeInUp 1.2s ease-out 0.6s both;
+      line-height: 1.9;
+    }
+
+    .scroll-indicator {
+      position: absolute;
+      bottom: 3rem;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--earth-brown);
+      font-size: 0.75rem;
+      letter-spacing: 0.1em;
+      animation: bounce 2s infinite;
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateX(-50%) translateY(0); }
+      50% { transform: translateX(-50%) translateY(10px); }
+    }
+
+    .scroll-indicator svg {
+      width: 24px;
+      height: 24px;
+    }
+
+    /* Navigation */
+    .nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      padding: 1.5rem 3rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 1000;
+      background: transparent;
+      transition: all 0.4s ease;
+    }
+
+    .nav.scrolled {
+      background: rgba(248, 245, 240, 0.95);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 2px 20px var(--soft-shadow);
+    }
+
+    .nav-logo {
+      font-family: 'Noto Serif KR', serif;
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--ink-black);
+      text-decoration: none;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--ink-black);
+      text-decoration: none;
+      font-size: 0.85rem;
+      letter-spacing: 0.05em;
+      position: relative;
+      transition: color 0.3s ease;
+    }
+
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 0;
+      height: 1px;
+      background: var(--accent-gold);
+      transition: width 0.3s ease;
+    }
+
+    .nav-links a:hover::after {
+      width: 100%;
+    }
+
+    /* Section Common */
+    section {
+      padding: 8rem 2rem;
+    }
+
+    .section-header {
+      text-align: center;
+      margin-bottom: 5rem;
+    }
+
+    .section-label {
+      font-size: 0.75rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--earth-brown);
+      margin-bottom: 1rem;
+    }
+
+    .section-title {
+      font-family: 'Noto Serif KR', serif;
+      font-size: clamp(2rem, 5vw, 3rem);
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+    }
+
+    .section-desc {
+      max-width: 700px;
+      margin: 0 auto;
+      color: var(--mountain-blue);
+    }
+
+    /* Prologue Section */
+    #prologue {
+      background: var(--ink-black);
+      color: var(--paper-white);
+      position: relative;
+      overflow: hidden;
+    }
+
+    #prologue::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: 
+        radial-gradient(ellipse at 0% 0%, rgba(196, 169, 98, 0.15) 0%, transparent 50%),
+        radial-gradient(ellipse at 100% 100%, rgba(90, 110, 127, 0.1) 0%, transparent 40%);
+    }
+
+    #prologue .section-label {
+      color: var(--accent-gold);
+    }
+
+    .prologue-content {
+      max-width: 800px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+    }
+
+    .prologue-text {
+      font-family: 'Noto Serif KR', serif;
+      font-size: 1.15rem;
+      line-height: 2.2;
+      color: rgba(248, 245, 240, 0.85);
+    }
+
+    .prologue-text p {
+      margin-bottom: 2rem;
+      text-indent: 1em;
+    }
+
+    .prologue-highlight {
+      font-size: 1.4rem;
+      color: var(--accent-gold);
+      text-align: center;
+      margin: 3rem 0;
+      font-style: italic;
+      text-indent: 0 !important;
+    }
+
+    /* Chapter Navigation */
+    .chapter-nav {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      margin-bottom: 4rem;
+      flex-wrap: wrap;
+    }
+
+    .chapter-btn {
+      padding: 0.8rem 1.5rem;
+      border: 1px solid var(--earth-brown);
+      background: transparent;
+      color: var(--ink-black);
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .chapter-btn:hover, .chapter-btn.active {
+      background: var(--ink-black);
+      color: var(--paper-white);
+      border-color: var(--ink-black);
+    }
+
+    .chapter-btn .chapter-icon {
+      width: 20px;
+      height: 20px;
+    }
+
+    .chapter-btn[data-chapter="root"] { border-color: var(--root-color); }
+    .chapter-btn[data-chapter="root"]:hover, .chapter-btn[data-chapter="root"].active { background: var(--root-color); border-color: var(--root-color); }
+    
+    .chapter-btn[data-chapter="stem"] { border-color: var(--stem-color); }
+    .chapter-btn[data-chapter="stem"]:hover, .chapter-btn[data-chapter="stem"].active { background: var(--stem-color); border-color: var(--stem-color); }
+    
+    .chapter-btn[data-chapter="flower"] { border-color: var(--flower-color); }
+    .chapter-btn[data-chapter="flower"]:hover, .chapter-btn[data-chapter="flower"].active { background: var(--flower-color); border-color: var(--flower-color); }
+    
+    .chapter-btn[data-chapter="forest"] { border-color: var(--forest-color); }
+    .chapter-btn[data-chapter="forest"]:hover, .chapter-btn[data-chapter="forest"].active { background: var(--forest-color); border-color: var(--forest-color); }
+
+    /* Interviews Section */
+    #interviews {
+      background: var(--paper-white);
+    }
+
+    .interview-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 2rem;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .interview-card {
+      background: var(--paper-white);
+      border: 1px solid rgba(139, 115, 85, 0.2);
+      padding: 2rem;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.4s ease;
+      cursor: pointer;
+    }
+
+    .interview-card::before {
+      content: '"';
+      position: absolute;
+      top: 1rem;
+      right: 1.5rem;
+      font-family: 'Noto Serif KR', serif;
+      font-size: 5rem;
+      color: var(--accent-gold);
+      opacity: 0.15;
+      line-height: 1;
+    }
+
+    .interview-card:hover {
+      border-color: var(--accent-gold);
+      box-shadow: 0 10px 40px var(--soft-shadow);
+      transform: translateY(-5px);
+    }
+
+    .interview-header {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .interview-avatar {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: var(--hanji-cream);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Noto Serif KR', serif;
+      font-size: 1.3rem;
+      color: var(--earth-brown);
+      flex-shrink: 0;
+    }
+
+    .interview-meta {
+      flex: 1;
+    }
+
+    .interview-name {
+      font-weight: 600;
+      font-size: 1.1rem;
+      margin-bottom: 0.25rem;
+    }
+
+    .interview-role {
+      font-size: 0.85rem;
+      color: var(--earth-brown);
+    }
+
+    .interview-chapter {
+      display: inline-block;
+      padding: 0.2rem 0.6rem;
+      font-size: 0.7rem;
+      letter-spacing: 0.05em;
+      margin-top: 0.5rem;
+      color: white;
+    }
+
+    .interview-chapter.root { background: var(--root-color); }
+    .interview-chapter.stem { background: var(--stem-color); }
+    .interview-chapter.flower { background: var(--flower-color); }
+    .interview-chapter.forest { background: var(--forest-color); }
+
+    .interview-quote {
+      font-family: 'Noto Serif KR', serif;
+      font-size: 1rem;
+      line-height: 1.9;
+      color: var(--ink-black);
+    }
+
+    /* Timeline Section */
+    #timeline {
+      background: var(--hanji-cream);
+    }
+
+    .timeline-container {
+      max-width: 900px;
+      margin: 0 auto;
+      position: relative;
+    }
+
+    .timeline-line {
+      position: absolute;
+      left: 50%;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: linear-gradient(to bottom, var(--root-color), var(--stem-color), var(--flower-color), var(--forest-color));
+    }
+
+    .timeline-item {
+      display: flex;
+      align-items: flex-start;
+      margin-bottom: 4rem;
+      position: relative;
+    }
+
+    .timeline-item:nth-child(odd) {
+      flex-direction: row-reverse;
+      text-align: right;
+    }
+
+    .timeline-item:nth-child(odd) .timeline-content {
+      padding-right: 4rem;
+      padding-left: 0;
+    }
+
+    .timeline-content {
+      flex: 1;
+      padding-left: 4rem;
+    }
+
+    .timeline-dot {
+      position: absolute;
+      left: 50%;
+      top: 0.5rem;
+      width: 14px;
+      height: 14px;
+      background: var(--accent-gold);
+      border-radius: 50%;
+      transform: translateX(-50%);
+      border: 3px solid var(--hanji-cream);
+    }
+
+    .timeline-year {
+      font-family: 'Noto Serif KR', serif;
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--accent-gold);
+      margin-bottom: 0.5rem;
+    }
+
+    .timeline-title {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+
+    .timeline-desc {
+      font-size: 0.95rem;
+      color: var(--mountain-blue);
+    }
+
+    /* Landmarks Section */
+    #landmarks {
+      background: var(--paper-white);
+    }
+
+    .landmark-container {
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .landmark-item {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+      margin-bottom: 8rem;
+      opacity: 0;
+      transform: translateY(50px);
+      transition: all 0.8s ease;
+    }
+
+    .landmark-item.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .landmark-item:nth-child(even) {
+      direction: rtl;
+    }
+
+    .landmark-item:nth-child(even) > * {
+      direction: ltr;
+    }
+
+    .landmark-visual {
+      position: relative;
+      aspect-ratio: 4/3;
+      background: var(--hanji-cream);
+      overflow: hidden;
+    }
+
+    .landmark-visual::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      border: 1px solid var(--earth-brown);
+      opacity: 0.3;
+      margin: 1rem;
+      z-index: 1;
+    }
+
+    .landmark-image {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Noto Serif KR', serif;
+      font-size: 4rem;
+      color: var(--earth-brown);
+      opacity: 0.3;
+    }
+
+    .landmark-number {
+      position: absolute;
+      top: -1rem;
+      left: -1rem;
+      font-family: 'Noto Serif KR', serif;
+      font-size: 6rem;
+      font-weight: 900;
+      color: var(--accent-gold);
+      opacity: 0.3;
+      line-height: 1;
+    }
+
+    .landmark-content {
+      padding: 2rem 0;
+    }
+
+    .landmark-category {
+      display: inline-block;
+      padding: 0.3rem 0.8rem;
+      background: var(--forest-green);
+      color: var(--paper-white);
+      font-size: 0.7rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 1.5rem;
+    }
+
+    .landmark-title {
+      font-family: 'Noto Serif KR', serif;
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+
+    .landmark-subtitle {
+      font-size: 1rem;
+      color: var(--earth-brown);
+      margin-bottom: 1.5rem;
+    }
+
+    .landmark-desc {
+      color: var(--mountain-blue);
+      margin-bottom: 2rem;
+      line-height: 2;
+    }
+
+    .landmark-quote {
+      font-family: 'Noto Serif KR', serif;
+      font-style: italic;
+      padding: 1rem;
+      border-left: 3px solid var(--accent-gold);
+      background: var(--hanji-cream);
+      margin-top: 1.5rem;
+      font-size: 0.95rem;
+      color: var(--earth-brown);
+    }
+
+    /* Ecosystem Section */
+    #ecosystem {
+      background: var(--ink-black);
+      color: var(--paper-white);
+      position: relative;
+    }
+
+    #ecosystem::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: 
+        radial-gradient(ellipse at 30% 20%, rgba(139, 115, 85, 0.2) 0%, transparent 50%),
+        radial-gradient(ellipse at 70% 80%, rgba(74, 93, 74, 0.15) 0%, transparent 40%);
+    }
+
+    #ecosystem .section-label {
+      color: var(--accent-gold);
+    }
+
+    #ecosystem .section-desc {
+      color: rgba(248, 245, 240, 0.7);
+    }
+
+    .ecosystem-visual {
+      max-width: 900px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+    }
+
+    .ecosystem-tree {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2rem;
+    }
+
+    .ecosystem-layer {
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+      width: 100%;
+      justify-content: center;
+    }
+
+    .ecosystem-node {
+      padding: 1.5rem 2rem;
+      background: rgba(248, 245, 240, 0.05);
+      border: 1px solid rgba(248, 245, 240, 0.2);
+      text-align: center;
+      transition: all 0.3s ease;
+      flex: 1;
+      max-width: 250px;
+    }
+
+    .ecosystem-node:hover {
+      background: rgba(248, 245, 240, 0.1);
+      border-color: var(--accent-gold);
+    }
+
+    .ecosystem-node h4 {
+      font-family: 'Noto Serif KR', serif;
+      font-size: 1.1rem;
+      margin-bottom: 0.5rem;
+      color: var(--accent-gold);
+    }
+
+    .ecosystem-node p {
+      font-size: 0.9rem;
+      color: rgba(248, 245, 240, 0.7);
+    }
+
+    .ecosystem-connector {
+      width: 2px;
+      height: 40px;
+      background: linear-gradient(to bottom, var(--accent-gold), transparent);
+    }
+
+    .ecosystem-quote {
+      text-align: center;
+      margin-top: 4rem;
+      padding: 2rem;
+      border: 1px solid rgba(248, 245, 240, 0.2);
+    }
+
+    .ecosystem-quote blockquote {
+      font-family: 'Noto Serif KR', serif;
+      font-size: 1.2rem;
+      font-style: italic;
+      color: rgba(248, 245, 240, 0.9);
+      margin-bottom: 1rem;
+    }
+
+    .ecosystem-quote cite {
+      font-size: 0.9rem;
+      color: var(--accent-gold);
+    }
+
+    /* Footer */
+    footer {
+      background: var(--ink-black);
+      color: var(--paper-white);
+      padding: 5rem 2rem 3rem;
+    }
+
+    .footer-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 4rem;
+    }
+
+    .footer-brand {
+      max-width: 350px;
+    }
+
+    .footer-logo {
+      font-family: 'Noto Serif KR', serif;
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+    }
+
+    .footer-desc {
+      font-size: 0.9rem;
+      color: rgba(248, 245, 240, 0.6);
+      line-height: 1.8;
+    }
+
+    .footer-section h4 {
+      font-size: 0.75rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      margin-bottom: 1.5rem;
+      color: var(--accent-gold);
+    }
+
+    .footer-section ul {
+      list-style: none;
+    }
+
+    .footer-section li {
+      margin-bottom: 0.75rem;
+    }
+
+    .footer-section a {
+      color: rgba(248, 245, 240, 0.6);
+      text-decoration: none;
+      font-size: 0.9rem;
+      transition: color 0.3s ease;
+    }
+
+    .footer-section a:hover {
+      color: var(--paper-white);
+    }
+
+    .footer-bottom {
+      max-width: 1200px;
+      margin: 4rem auto 0;
+      padding-top: 2rem;
+      border-top: 1px solid rgba(248, 245, 240, 0.1);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.85rem;
+      color: rgba(248, 245, 240, 0.4);
+    }
+
+    .footer-credits {
+      display: flex;
+      gap: 2rem;
+    }
+
+    /* Modal */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(26, 26, 26, 0.9);
+      z-index: 10000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      opacity: 0;
+      transition: opacity 0.4s ease;
+    }
+
+    .modal-overlay.active {
+      display: flex;
+      opacity: 1;
+    }
+
+    .modal-content {
+      background: var(--paper-white);
+      max-width: 750px;
+      width: 100%;
+      max-height: 85vh;
+      overflow-y: auto;
+      padding: 3rem;
+      position: relative;
+      transform: translateY(20px);
+      transition: transform 0.4s ease;
+    }
+
+    .modal-overlay.active .modal-content {
+      transform: translateY(0);
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 1.5rem;
+      right: 1.5rem;
+      width: 40px;
+      height: 40px;
+      border: none;
+      background: none;
+      cursor: pointer;
+      color: var(--ink-black);
+      font-size: 1.5rem;
+    }
+
+    .modal-header {
+      margin-bottom: 2rem;
+      padding-bottom: 1.5rem;
+      border-bottom: 1px solid rgba(139, 115, 85, 0.2);
+    }
+
+    .modal-avatar {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: var(--hanji-cream);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Noto Serif KR', serif;
+      font-size: 2rem;
+      color: var(--earth-brown);
+      margin-bottom: 1.5rem;
+    }
+
+    .modal-name {
+      font-family: 'Noto Serif KR', serif;
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+
+    .modal-role {
+      color: var(--earth-brown);
+      margin-bottom: 0.5rem;
+    }
+
+    .modal-chapter {
+      display: inline-block;
+      padding: 0.3rem 0.8rem;
+      font-size: 0.75rem;
+      color: white;
+    }
+
+    .modal-chapter.root { background: var(--root-color); }
+    .modal-chapter.stem { background: var(--stem-color); }
+    .modal-chapter.flower { background: var(--flower-color); }
+    .modal-chapter.forest { background: var(--forest-color); }
+
+    .modal-body {
+      line-height: 2;
+    }
+
+    .modal-body p {
+      margin-bottom: 1.5rem;
+      text-indent: 1em;
+    }
+
+    .modal-body .highlight-quote {
+      font-family: 'Noto Serif KR', serif;
+      font-size: 1.1rem;
+      padding: 1.5rem;
+      background: var(--hanji-cream);
+      border-left: 3px solid var(--accent-gold);
+      margin: 2rem 0;
+      text-indent: 0;
+      font-style: italic;
+    }
+
+    .modal-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: 2rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid rgba(139, 115, 85, 0.2);
+    }
+
+    .modal-tag {
+      padding: 0.3rem 0.8rem;
+      background: var(--hanji-cream);
+      font-size: 0.8rem;
+      color: var(--earth-brown);
+    }
+
+    /* Responsive */
+    @media (max-width: 1024px) {
+      .landmark-item {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+      }
+
+      .landmark-item:nth-child(even) {
+        direction: ltr;
+      }
+
+      .footer-content {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .interview-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .nav {
+        padding: 1rem 1.5rem;
+      }
+
+      .nav-links {
+        display: none;
+      }
+
+      section {
+        padding: 5rem 1.5rem;
+      }
+
+      .chapter-nav {
+        gap: 0.5rem;
+      }
+
+      .chapter-btn {
+        padding: 0.6rem 1rem;
+        font-size: 0.8rem;
+      }
+
+      .timeline-line {
+        left: 1rem;
+      }
+
+      .timeline-item,
+      .timeline-item:nth-child(odd) {
+        flex-direction: column;
+        text-align: left;
+        padding-left: 3rem;
+      }
+
+      .timeline-item:nth-child(odd) .timeline-content,
+      .timeline-content {
+        padding-left: 0;
+        padding-right: 0;
+      }
+
+      .timeline-dot {
+        left: 1rem;
+      }
+
+      .footer-content {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+      }
+
+      .footer-bottom {
+        flex-direction: column;
+        gap: 1rem;
+        text-align: center;
+      }
+
+      .ecosystem-layer {
+        flex-direction: column;
+      }
+
+      .ecosystem-node {
+        max-width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="nav" id="nav">
+    <a href="#" class="nav-logo">원주 아카이브</a>
+    <ul class="nav-links">
+      <li><a href="#prologue">프롤로그</a></li>
+      <li><a href="#interviews">구술 기록</a></li>
+      <li><a href="#timeline">연혁</a></li>
+      <li><a href="#landmarks">문화 거점</a></li>
+      <li><a href="#ecosystem">생태계</a></li>
+    </ul>
+  </nav>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-content">
+      <div class="unesco-badge">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"/>
+          <path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+        </svg>
+        UNESCO 문학 창의도시 · 2019
+      </div>
+      <h1 class="hero-title">
+        원주시민이 경작한<br>생명의 서사
+        <span>한 장의 종이에서 하나의 숲까지</span>
+      </h1>
+      <p class="hero-subtitle">
+        뿌리가 땅 깊이 내려가고, 줄기가 하늘을 향해 뻗고,<br>
+        꽃이 피어나고, 마침내 숲을 이루는 과정.<br>
+        원주는 그렇게, 시민의 손으로 경작된 생명의 도시가 되어가고 있다.
+      </p>
+    </div>
+    <div class="scroll-indicator">
+      <span>SCROLL</span>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M12 5v14M5 12l7 7 7-7"/>
+      </svg>
+    </div>
+  </section>
+
+  <!-- Prologue -->
+  <section id="prologue">
+    <div class="section-header">
+      <p class="section-label">Prologue</p>
+      <h2 class="section-title" style="color: var(--paper-white);">땅의 기억이 씨앗이 되다</h2>
+    </div>
+    <div class="prologue-content">
+      <div class="prologue-text">
+        <p>2026년 1월, 겨울의 원주는 고요하다. 치악산 자락에는 흰 눈이 얇게 쌓여 있고, 원주천을 건너는 바람은 차갑다. 하지만 이 고요함 속에는 28년 동안 끊이지 않고 흘러온 이야기가 있다.</p>
+        
+        <p class="prologue-highlight">그것은 한 장의 종이에서 시작해, 한 권의 그림책으로 꽃피우고,<br>한 도시 전체의 정체성으로 뿌리내린 생명의 서사다.</p>
+        
+        <p>일곱 사람의 이야기는 제각각이지만, 하나의 흐름으로 모인다. 그것은 도시가 하나의 생명체처럼 자라나는 과정이다. 뿌리가 땅 깊이 내려가고, 줄기가 하늘을 향해 뻗고, 꽃이 피어나고, 마침내 숲을 이루는 과정. 원주는 그렇게, 시민의 손으로 경작된 생명의 도시가 되어가고 있다.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Interviews -->
+  <section id="interviews">
+    <div class="section-header">
+      <p class="section-label">Oral Archives</p>
+      <h2 class="section-title">구술 아카이브</h2>
+      <p class="section-desc">
+        원주 문화 생태계를 이끄는 일곱 사람의 생생한 이야기
+      </p>
+    </div>
+
+    <!-- Chapter Navigation -->
+    <div class="chapter-nav">
+      <button class="chapter-btn active" data-chapter="all">전체</button>
+      <button class="chapter-btn" data-chapter="root">1장. 뿌리</button>
+      <button class="chapter-btn" data-chapter="stem">2장. 줄기</button>
+      <button class="chapter-btn" data-chapter="flower">3장. 꽃</button>
+      <button class="chapter-btn" data-chapter="forest">4장. 숲</button>
+    </div>
+
+    <div class="interview-grid">
+      <!-- 장응열 -->
+      <div class="interview-card" data-person="jang" data-chapters="root">
+        <div class="interview-header">
+          <div class="interview-avatar">匠</div>
+          <div class="interview-meta">
+            <p class="interview-name">장응열</p>
+            <p class="interview-role">3대째 한지장 · 강원도무형문화재 제32호</p>
+            <span class="interview-chapter root">1장. 뿌리</span>
+          </div>
+        </div>
+        <p class="interview-quote">
+          "한지는 죽을 때까지 배워야 하는 일입니다. 50년 넘게 이 일을 했지만, 지금도 '아, 이렇게 해야 하는데' 하는 아쉬움과 새로운 깨달음을 얻곤 합니다."
+        </p>
+      </div>
+
+      <!-- 김진희 -->
+      <div class="interview-card" data-person="kimjh" data-chapters="root stem forest">
+        <div class="interview-header">
+          <div class="interview-avatar">紙</div>
+          <div class="interview-meta">
+            <p class="interview-name">김진희</p>
+            <p class="interview-role">한지개발원 이사장 · 한지문화제 28년</p>
+            <span class="interview-chapter root">1장. 뿌리</span>
+          </div>
+        </div>
+        <p class="interview-quote">
+          "정부 주도 사업은 예산에 따라 흥망이 좌우되고 흐지부지되기 쉽지만, 시민의 힘은 다르다. 어려울 때 더 잘 버티는 것이 시민의 저력이다."
+        </p>
+      </div>
+
+      <!-- 황도근 -->
+      <div class="interview-card" data-person="hwang" data-chapters="stem forest">
+        <div class="interview-header">
+          <div class="interview-avatar">道</div>
+          <div class="interview-meta">
+            <p class="interview-name">황도근</p>
+            <p class="interview-role">무위당학교 · 장일순 선생 제자</p>
+            <span class="interview-chapter stem">2장. 줄기</span>
+          </div>
+        </div>
+        <p class="interview-quote">
+          "그 풀, 네가 키웠니? 내가 다니는 길만 내고, 나머지는 그냥 둬라." 생명에 대한 겸손, 공존의 지혜. 이것이 원주가 다음 세대에 물려줄 가장 소중한 유산이다.
+        </p>
+      </div>
+
+      <!-- 이상희 -->
+      <div class="interview-card" data-person="lee" data-chapters="stem flower forest">
+        <div class="interview-header">
+          <div class="interview-avatar">冊</div>
+          <div class="interview-meta">
+            <p class="interview-name">이상희</p>
+            <p class="interview-role">원주시 그림책센터 〈일상예술〉 대표</p>
+            <span class="interview-chapter flower">3장. 꽃</span>
+          </div>
+        </div>
+        <p class="interview-quote">
+          "그림책은 나 같은 내향적인 사람을 세상 밖으로 밀어냈습니다. 이 좋은 것을 어찌 혼자만 누릴 수 있겠는가. 그런 생각이 사람들 속으로 나를 이끌었습니다."
+        </p>
+      </div>
+
+      <!-- 이현미 -->
+      <div class="interview-card" data-person="leehm" data-chapters="flower">
+        <div class="interview-header">
+          <div class="interview-avatar">館</div>
+          <div class="interview-meta">
+            <p class="interview-name">이현미</p>
+            <p class="interview-role">원주시 그림책도서관 팀장</p>
+            <span class="interview-chapter flower">3장. 꽃</span>
+          </div>
+        </div>
+        <p class="interview-quote">
+          "언제 와도 보고 싶은 그림책이 있고, 편안하게 책을 보다 갈 수 있는 곳. 10년 후 어른이 된 아이가 '어렸을 때 자주 갔던 그림책도서관이 기억나요'라고 말한다면, 그것으로 충분합니다."
+        </p>
+      </div>
+
+      <!-- 박지혜 -->
+      <div class="interview-card" data-person="park" data-chapters="flower forest">
+        <div class="interview-header">
+          <div class="interview-avatar">兎</div>
+          <div class="interview-meta">
+            <p class="interview-name">박지혜</p>
+            <p class="interview-role">책방 〈걷는토끼〉 운영 · 한살림 이사</p>
+            <span class="interview-chapter flower">3장. 꽃</span>
+          </div>
+        </div>
+        <p class="interview-quote">
+          "돈을 벌어야 한다는 강박이 사라지니, 텅 빈 시간이 스트레스가 아닌 여유로 다가왔습니다. 느린 토끼의 걸음처럼, 조용히, 그러나 단단하게 이곳을 지켜갑니다."
+        </p>
+      </div>
+
+      <!-- 김혜령 -->
+      <div class="interview-card" data-person="kimhr" data-chapters="flower forest">
+        <div class="interview-header">
+          <div class="interview-avatar">城</div>
+          <div class="interview-meta">
+            <p class="interview-name">김혜령</p>
+            <p class="interview-role">원주시 문화예술과 창의도시팀</p>
+            <span class="interview-chapter forest">4장. 숲</span>
+          </div>
+        </div>
+        <p class="interview-quote">
+          "박경리 선생의 『토지』는 거대한 나무와 같습니다. 시민들이 직접 만든 500여 권의 그림책은 그 나무 주변에 피어난 들꽃과 같습니다. 거대한 나무와 수많은 들꽃이 함께 어우러져, 비로소 원주다움이라는 하나의 숲을 이룹니다."
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Timeline -->
+  <section id="timeline">
+    <div class="section-header">
+      <p class="section-label">History</p>
+      <h2 class="section-title">원주 문화 생태계 연혁</h2>
+      <p class="section-desc">
+        시민의 손으로 경작한 28년의 여정
+      </p>
+    </div>
+    <div class="timeline-container">
+      <div class="timeline-line"></div>
+      
+      <div class="timeline-item">
+        <div class="timeline-content">
+          <div class="timeline-year">1985</div>
+          <h4 class="timeline-title">무위당 장일순과의 만남</h4>
+          <p class="timeline-desc">황도근, 원주로 와 생명 사상의 스승을 만나다</p>
+        </div>
+        <div class="timeline-dot"></div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="timeline-content">
+          <div class="timeline-year">1994</div>
+          <h4 class="timeline-title">『토지』 완간</h4>
+          <p class="timeline-desc">박경리 작가, 26년 집필 끝에 원고지 4만매의 대하소설 완성</p>
+        </div>
+        <div class="timeline-dot"></div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="timeline-content">
+          <div class="timeline-year">1999</div>
+          <h4 class="timeline-title">한지문화제 시작</h4>
+          <p class="timeline-desc">김진희와 시민단체, 예산 없이 맨몸으로 축제를 시작하다</p>
+        </div>
+        <div class="timeline-dot"></div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="timeline-content">
+          <div class="timeline-year">2001</div>
+          <h4 class="timeline-title">한지개발원 설립</h4>
+          <p class="timeline-desc">시민의 힘으로 비영리 법인 설립, 한지 문화 도시의 꿈 구체화</p>
+        </div>
+        <div class="timeline-dot"></div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="timeline-content">
+          <div class="timeline-year">2004</div>
+          <h4 class="timeline-title">패랭이꽃그림책버스 출발</h4>
+          <p class="timeline-desc">이상희, 낡은 버스에 그림책을 싣고 아이들을 찾아 나서다</p>
+        </div>
+        <div class="timeline-dot"></div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="timeline-content">
+          <div class="timeline-year">2011</div>
+          <h4 class="timeline-title">한지테마파크 개관</h4>
+          <p class="timeline-desc">12년의 준비 끝에 한지 복합문화공간 문을 열다</p>
+        </div>
+        <div class="timeline-dot"></div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="timeline-content">
+          <div class="timeline-year">2019</div>
+          <h4 class="timeline-title">유네스코 문학창의도시 가입</h4>
+          <p class="timeline-desc">500여 권의 시민 창작 그림책이 결정적 근거가 되다</p>
+        </div>
+        <div class="timeline-dot"></div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="timeline-content">
+          <div class="timeline-year">2020</div>
+          <h4 class="timeline-title">문화도시 선정</h4>
+          <p class="timeline-desc">문화체육관광부 지정, 1년 간격으로 두 개의 문화 타이틀 획득</p>
+        </div>
+        <div class="timeline-dot"></div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="timeline-content">
+          <div class="timeline-year">2023</div>
+          <h4 class="timeline-title">원주시 그림책도서관 개관</h4>
+          <p class="timeline-desc">그림책 버스의 꿈이 1만 7천여 권의 도서관으로 실현되다</p>
+        </div>
+        <div class="timeline-dot"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Landmarks -->
+  <section id="landmarks">
+    <div class="section-header">
+      <p class="section-label">Cultural Landmarks</p>
+      <h2 class="section-title">문화 거점</h2>
+      <p class="section-desc">
+        원주 문화 생태계를 구성하는 핵심 공간들
+      </p>
+    </div>
+    <div class="landmark-container">
+      <!-- 한지테마파크 -->
+      <div class="landmark-item">
+        <div class="landmark-visual">
+          <span class="landmark-number">01</span>
+          <div class="landmark-image">紙</div>
+        </div>
+        <div class="landmark-content">
+          <span class="landmark-category">전통 공예</span>
+          <h3 class="landmark-title">한지테마파크</h3>
+          <p class="landmark-subtitle">국내 최초 한지 복합문화공간</p>
+          <p class="landmark-desc">
+            『세종실록지리지』에 기록된 한지의 본고장, 원주. 1999년 시민의 힘으로 시작된 
+            한지문화제가 12년의 준비 끝에 2011년 이곳에 터를 잡았다. 50:50 예산 구조로 
+            자율성과 지속 가능성의 균형을 이룬다.
+          </p>
+          <div class="landmark-quote">
+            "100번 손길을 거쳐, 10일 걸려서, 1장이 나온다. 천 년을 버티는 종이." — 장응열
+          </div>
+        </div>
+      </div>
+
+      <!-- 그림책센터 일상예술 -->
+      <div class="landmark-item">
+        <div class="landmark-visual">
+          <span class="landmark-number">02</span>
+          <div class="landmark-image">冊</div>
+        </div>
+        <div class="landmark-content">
+          <span class="landmark-category">그림책</span>
+          <h3 class="landmark-title">원주시 그림책센터 〈일상예술〉</h3>
+          <p class="landmark-subtitle">사회적 협동조합 그림책 도시 운영</p>
+          <p class="landmark-desc">
+            2004년 패랭이꽃그림책버스에서 시작된 꿈이 협동조합의 형태로 실현된 공간. 
+            20년간 500여 권의 시민 창작 그림책이 탄생했다. 독자가 창작자가 되는, 
+            전국 어디에도 없는 기적이 이곳에서 일어난다.
+          </p>
+          <div class="landmark-quote">
+            "매일 아침 8시 40분, 그림책을 펼친다. 어제의 노여움을 씻어내고, 새로운 하루를 시작하기 위한 나만의 세수." — 이상희
+          </div>
+        </div>
+      </div>
+
+      <!-- 원주시 그림책도서관 -->
+      <div class="landmark-item">
+        <div class="landmark-visual">
+          <span class="landmark-number">03</span>
+          <div class="landmark-image">館</div>
+        </div>
+        <div class="landmark-content">
+          <span class="landmark-category">도서관</span>
+          <h3 class="landmark-title">원주시 그림책도서관</h3>
+          <p class="landmark-subtitle">1만 7천여 권의 그림책을 품은 공간</p>
+          <p class="landmark-desc">
+            그림책 버스의 실물 모델로 만들어진 도서관. 2023년 문을 열어 지하 1층부터 
+            지상 2층까지 가족 단위 방문객에게 따뜻한 공간을 제공한다. 거창한 비전보다 
+            한 사람 한 사람의 마음속에 남는 기억을 만드는 곳.
+          </p>
+          <div class="landmark-quote">
+            "언제 와도 보고 싶은 그림책이 있고, 편안하게 책을 보다 갈 수 있는 곳. 그것으로 충분합니다." — 이현미
+          </div>
+        </div>
+      </div>
+
+      <!-- 강원감영 -->
+      <div class="landmark-item">
+        <div class="landmark-visual">
+          <span class="landmark-number">04</span>
+          <div class="landmark-image">營</div>
+        </div>
+        <div class="landmark-content">
+          <span class="landmark-category">역사</span>
+          <h3 class="landmark-title">강원감영</h3>
+          <p class="landmark-subtitle">500년 역사의 중심</p>
+          <p class="landmark-desc">
+            조선시대 도청 역할을 했던 강원감영은 지금도 원주의 심장부에 남아 있다. 
+            그 주변으로 인쇄 골목이 형성되었고, 이것이 원주가 한지의 도시가 된 역사적 배경이다.
+            봄의 목련, 여름의 초록, 가을의 단풍, 겨울의 고요함이 계절마다 다른 얼굴을 보여준다.
+          </p>
+          <div class="landmark-quote">
+            "이 공간은 원주가 단순한 길목이 아니라 역사의 중심이었음을 말없이 보여준다." — 김혜령
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Ecosystem Section -->
+  <section id="ecosystem">
+    <div class="section-header">
+      <p class="section-label">Cultural Ecosystem</p>
+      <h2 class="section-title" style="color: var(--paper-white);">문화 생태계의 순환</h2>
+      <p class="section-desc">
+        장인, 예술가, 시민, 기획, 행정이 함께 만드는 지속 가능한 구조
+      </p>
+    </div>
+    <div class="ecosystem-visual">
+      <div class="ecosystem-tree">
+        <div class="ecosystem-layer">
+          <div class="ecosystem-node">
+            <h4>장인</h4>
+            <p>한지를 생산하는 뿌리<br>3대째 이어온 기술</p>
+          </div>
+        </div>
+        <div class="ecosystem-connector"></div>
+        <div class="ecosystem-layer">
+          <div class="ecosystem-node">
+            <h4>예술가</h4>
+            <p>문화와 예술을 창조<br>그림책 작가, 현대미술가</p>
+          </div>
+          <div class="ecosystem-node">
+            <h4>기획</h4>
+            <p>장인과 예술가를<br>시민과 연결하는 다리</p>
+          </div>
+        </div>
+        <div class="ecosystem-connector"></div>
+        <div class="ecosystem-layer">
+          <div class="ecosystem-node">
+            <h4>시민</h4>
+            <p>향유하고 소비하며<br>스스로 창작자가 되는 주체</p>
+          </div>
+          <div class="ecosystem-node">
+            <h4>행정</h4>
+            <p>순환 구조가 굴러가도록<br>든든한 지원군 역할</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="ecosystem-quote">
+        <blockquote>
+          "이 생태계의 중심에는 한지를 생산하는 장인이 있어야 한다.<br>
+          그들이 굳건히 자리를 지켜야 모든 것이 시작될 수 있다."
+        </blockquote>
+        <cite>— 김진희, 한지개발원 이사장</cite>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-content">
+      <div class="footer-brand">
+        <div class="footer-logo">원주 문화 아카이브</div>
+        <p class="footer-desc">
+          원주시민이 경작한 생명의 서사. 한 장의 종이에서 하나의 숲까지.
+          뿌리에서 줄기로, 줄기에서 꽃으로, 꽃에서 숲으로. 
+          그리고 그 숲 속에서 새로운 씨앗이 싹트고, 다시 뿌리를 내리고, 
+          또 다른 이야기가 시작된다.
+        </p>
+      </div>
+      <div class="footer-section">
+        <h4>서사 구조</h4>
+        <ul>
+          <li><a href="#prologue">프롤로그</a></li>
+          <li><a href="#interviews">1장. 뿌리</a></li>
+          <li><a href="#interviews">2장. 줄기</a></li>
+          <li><a href="#interviews">3장. 꽃</a></li>
+          <li><a href="#interviews">4장. 숲</a></li>
+        </ul>
+      </div>
+      <div class="footer-section">
+        <h4>아카이브</h4>
+        <ul>
+          <li><a href="#interviews">구술 기록</a></li>
+          <li><a href="#timeline">연혁</a></li>
+          <li><a href="#landmarks">문화 거점</a></li>
+          <li><a href="#ecosystem">생태계 분석</a></li>
+        </ul>
+      </div>
+      <div class="footer-section">
+        <h4>연결</h4>
+        <ul>
+          <li><a href="#">한지테마파크</a></li>
+          <li><a href="#">원주시 그림책센터</a></li>
+          <li><a href="#">토지문화재단</a></li>
+          <li><a href="#">원주시청</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 원주 문학창의도시 문화 생태계 구술 아카이브</p>
+      <div class="footer-credits">
+        <span>UNESCO City of Literature</span>
+        <span>AI-Powered Archive</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Modal -->
+  <div class="modal-overlay" id="modal">
+    <div class="modal-content">
+      <button class="modal-close" onclick="closeModal()">×</button>
+      <div class="modal-header">
+        <div class="modal-avatar" id="modal-avatar">文</div>
+        <h3 class="modal-name" id="modal-name">인터뷰이</h3>
+        <p class="modal-role" id="modal-role">역할</p>
+        <span class="modal-chapter" id="modal-chapter">장</span>
+      </div>
+      <div class="modal-body" id="modal-body">
+        <p>인터뷰 내용이 여기에 표시됩니다.</p>
+      </div>
+      <div class="modal-tags" id="modal-tags"></div>
+    </div>
+  </div>
+
+  <script>
+    // Navigation scroll effect
+    const nav = document.getElementById('nav');
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 100) {
+        nav.classList.add('scrolled');
+      } else {
+        nav.classList.remove('scrolled');
+      }
+    });
+
+    // Landmark animation on scroll
+    const observerOptions = {
+      root: null,
+      rootMargin: '0px',
+      threshold: 0.2
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, observerOptions);
+
+    document.querySelectorAll('.landmark-item').forEach(item => {
+      observer.observe(item);
+    });
+
+    // Chapter filter
+    const chapterBtns = document.querySelectorAll('.chapter-btn');
+    const interviewCards = document.querySelectorAll('.interview-card');
+
+    chapterBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        chapterBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        
+        const chapter = btn.dataset.chapter;
+        
+        interviewCards.forEach(card => {
+          if (chapter === 'all' || card.dataset.chapters.includes(chapter)) {
+            card.style.display = 'block';
+          } else {
+            card.style.display = 'none';
+          }
+        });
+      });
+    });
+
+    // Modal data
+    const interviewData = {
+      jang: {
+        avatar: '匠',
+        name: '장응열',
+        role: '3대째 한지장 · 강원도무형문화재 제32호 · 50년 경력',
+        chapter: 'root',
+        chapterName: '1장. 뿌리',
+        content: `<p>100번 손길을 거쳐, 10일 걸려서, 1장이 나온다. 한 장의 한지가 세상에 나오기까지의 과정은 인내의 연속이다. 닥나무를 베고, 껍질을 벗기고, 삶고, 두드리고, 물에 풀고, 발로 뜨고, 말린다. 모든 과정이 손으로 이루어진다.</p>
+        
+        <p class="highlight-quote">"한지는 죽을 때까지 배워야 하는 일입니다. 1~2년 만에 흉내는 낼 수 있습니다. 모양은 그럴싸하게 만들 수 있을지 몰라도, 그 안에 깊이를 담아내지는 못합니다."</p>
+        
+        <p>한지의 생명력은 놀랍다. 천 년을 버티는 종이. 조선왕조실록이 지금까지 온전히 보존될 수 있었던 것은 한지 덕분이다. 옛사람들은 한지를 백지(白紙)라 불렀는데, 이는 백의민족을 상징하는 것이었다. 천 년을 가는 그 끈질김 속에는 역경을 이겨낸 우리 민족의 강인함이 담겨 있다.</p>
+        
+        <p>2015년 이후 상황이 급격히 나빠졌다. 한때 열두세 명이나 되던 직원들은 이제 없다. 지금은 온 식구 다섯이서 공방을 꾸려간다. 그들이 유일하게 바라보는 것은 한지의 유네스코 등재다. 그것이 아니면 버텨낼 재간이 없다.</p>
+        
+        <p>재료부터 다시 시작해야 한다고 믿었다. 시장을 찾아가 울며 호소한 끝에 간신히 닥나무 심기 사업을 시작한 지 6, 7년이 지났다. 다른 곳들이 거의 100% 수입산을 쓰는 것과 비교하면 이것은 대단한 시작이다. 최소한 우리는 우리 땅에서 자란 재료로 종이를 만든다는 자부심을 지킬 수 있다.</p>`,
+        tags: ['한지장', '무형문화재', '3대째', '닥나무', '전통 공예', '유네스코']
+      },
+      kimjh: {
+        avatar: '紙',
+        name: '김진희',
+        role: '한지개발원 이사장 · 한지문화제 28년 · 前 시민센터 사무국장',
+        chapter: 'root',
+        chapterName: '1장. 뿌리',
+        content: `<p>1999년, '원주참여자치시민센터' 사무국장으로 원주시 예산을 감시하고 있었다. 시민의 세금이 어디에, 어떻게 쓰이는지를 꼼꼼히 들여다보면 그 도시가 무엇을 중요하게 여기는지가 보이기 때문이다. 당시 원주를 설명하는 말은 하나였다. "군사도시." 문화 예산은 거의 없었다.</p>
+        
+        <p class="highlight-quote">"문화가 없는 도시에 살고 있다는 자각이 우리를 움직이게 했다. 이 도시에 진정한 우리만의 문화를 만들어야 한다는 결론에 이르렀다."</p>
+        
+        <p>2년 8개월 동안 지역 조사를 거듭했다. 서울 인사동 거리에서 '원주 한지 특판점'이라는 간판을 본 순간, 나아갈 길이 보였다. 생산의 역사, 소비의 역사, 그리고 그것을 이어온 사람들. 세 가지가 모두 갖춰져 있었다.</p>
+        
+        <p>1999년 한지문화제를 시작하며 두 가지를 제안했다. 하나는 '한지테마파크' 건립, 다른 하나는 '국제 종이 비엔날레' 개최. 그리고 마침내 2011년, 한지테마파크가 문을 열었다. 50:50 예산 구조로 운영된다. 이 구조 덕분에 자율성을 확보할 수 있었다.</p>
+        
+        <p class="highlight-quote">"정부 주도 사업은 예산에 따라 흥망이 좌우되고 흐지부지되기 쉽지만, 시민의 힘은 다르다. 어려울 때 더 잘 버티는 것이 시민의 저력이다. 이것이 원주 한지가 다른 지역과 가장 다른 점이다."</p>
+        
+        <p>사무국장으로 시작해 이사장직을 맡은 지 8년 차, 이 길에 뛰어든 지 28년이 흘렀다. 후배들이 자라 올라오고 있으니, 역할은 이 흐름이 다음 세대로 온전히 이어지도록 돕는 것이다.</p>`,
+        tags: ['한지문화제', '시민운동', '한지테마파크', '문화 정책', '생태계', '28년']
+      },
+      hwang: {
+        avatar: '道',
+        name: '황도근',
+        role: '무위당학교 · 상지대 교수 · 장일순 선생 제자',
+        chapter: 'stem',
+        chapterName: '2장. 줄기',
+        content: `<p>1985년 사과 한 봉지를 들고 원주로 왔다. 당시 원주는 흙먼지 날리는 뚝방길이 있는 시골이었다. 동료 교사의 소개로 무위당 장일순 선생님 댁을 찾아갔다. 선생님이 툭툭 던지는 말씀들은 결코 평범하지 않았다.</p>
+        
+        <p>하루는 담배를 피우시다 말고 창밖을 보며 "중국이 저렇게 발전하면 나중에 우리가 숨을 쉴 수 있을까" 하고 혼잣말처럼 말씀하셨다. 스물아홉 살의 청년은 그 말의 깊이를 전혀 이해하지 못했다.</p>
+        
+        <p class="highlight-quote">"너만 잘났냐. 왜 양쪽을 다 비판하느냐. 이사장 편을 들든, 동료들 편을 들든 둘 중 하나를 선택해."</p>
+        
+        <p>첫 번째 사건에서는 관찰자의 오만함을 배웠다. 두 번째 사건은 비가 내린 뒤 풀이 무성하게 자라난 어느 날이었다. 마당의 풀을 베고 있는데 선생님이 물었다. "아범아, 그 풀, 네가 키웠니?" 그리고 "내가 다니는 길만 내고, 나머지는 그냥 둬라."</p>
+        
+        <p class="highlight-quote">"생명의 주인이 누구인가를 질문하는 것이었다. 모든 생명은 스스로 살아가는 존재이며, 우리는 단지 그것을 잠시 돌볼 뿐이라는 깨달음."</p>
+        
+        <p>무위당 선생은 좌도 우도 아니었다. 그저 생명을 귀히 여기고, 사람이 사람답게 살 수 있는 세상을 꿈꿨을 뿐이다. 낮에는 민주화 운동의 동지들이, 밤에는 광복회 회원인 보수 우익 분들이 찾아왔다. 양쪽 모두를 품었다.</p>`,
+        tags: ['무위당', '장일순', '생명 사상', '협동조합', '원주 정신', '공존']
+      },
+      lee: {
+        avatar: '冊',
+        name: '이상희',
+        role: '원주시 그림책센터 〈일상예술〉 대표 · 시인 · 그림책 전도사',
+        chapter: 'flower',
+        chapterName: '3장. 꽃',
+        content: `<p>본래 지극히 내향적인 사람이었다. 책을 사랑하는 인문주의자이자, 고독 속에서 언어를 조각하는 시인으로 살았다. 세상은 책상 위, 조용한 방 안이 전부였다. 유일한 꿈은 그저 세상을 울릴 멋진 시 한 편을 쓰는 것, 그것뿐이었다.</p>
+        
+        <p class="highlight-quote">"그림책은 나 같은 사람을 세상 밖으로 밀어냈습니다. 이 좋은 것을 어찌 혼자만 누릴 수 있겠는가. 그런 생각이 사람들 속으로 이끌었습니다."</p>
+        
+        <p>2004년 패랭이꽃그림책버스가 시작되었다. 낡은 버스 한 대에 그림책을 가득 실고 아이들을 찾아 나섰다. 협동조합의 도시 볼로냐가 '볼로냐 국제아동도서전'으로 도시를 재건한 이야기가 강하게 자극했다.</p>
+        
+        <p>20년간 500여 권의 시민 창작 그림책이 탄생했다. 이것은 전국 어디에도 없는 기적이었다. 독자였던 시민들이 창작자가 되었다. 이것이 2019년 원주가 유네스코 문학 창의도시로 지정되는 결정적 근거가 되었다.</p>
+        
+        <p class="highlight-quote">"그림책 작가들을 세상에서 가장 위대한 예술가라 생각한다. 자신의 예술성을 아이들의 세계와 나누기 위해 기꺼이 자신을 낮추고 수많은 것들을 포용하는 예술가들은 정말 대단한 존재다."</p>
+        
+        <p>매일 아침 8시 40분, 그림책을 펼친다. 어제의 노여움을 씻어내고, 새로운 하루를 시작하기 위한 의식. 그림책은 모든 책이 전자책으로 변해도, 그 고유한 물성 때문에 최후의 책으로 남을 것이라고 믿는다.</p>`,
+        tags: ['그림책', '패랭이꽃버스', '시민 창작', '협동조합', '일상예술', '작가 권리']
+      },
+      leehm: {
+        avatar: '館',
+        name: '이현미',
+        role: '원주시 그림책도서관 팀장 · 원주 토박이',
+        chapter: 'flower',
+        chapterName: '3장. 꽃',
+        content: `<p>원주 토박이다. 대학 졸업 후 공무원 시험을 준비하다 원주시 그림책도서관 팀장이 되었다. 지하 1층부터 지상 2층까지, 1만 7천여 권의 그림책을 지킨다.</p>
+        
+        <p>지하 1층 자료실은 부모와 아이가 함께 와서 그림책을 볼 수 있는 가장 아늑한 공간이다. 1층은 전시실과 북큐레이션 공간, 2층에는 연령대가 조금 더 높은 아이들을 위한 그림책들이 비치되어 있다.</p>
+        
+        <p class="highlight-quote">"거창한 비전이나 목표가 아니라, 그저 매일 이 공간이 조금씩 더 좋은 곳이 되기를 바라며 일한다."</p>
+        
+        <p>평일에는 유치원이나 어린이 시설에서 단체로 견학을 온다. 주말이 되면 부모님의 손을 잡고 오는 아이들로 조금 더 붐빈다. 추운 겨울날에도 묵묵히 찾아오는 이들이 있고, 그들에게 따뜻한 공간을 제공하는 것이 역할이다.</p>
+        
+        <p>바다를 보며 가슴이 뻥 뚫리는 기분은 잘 모르지만, 잘 정돈된 서가와 책에 몰두한 아이의 뒷모습을 볼 때 온전한 충만함을 느낀다.</p>
+        
+        <p class="highlight-quote">"언제 와도 보고 싶은 그림책이 있고, 편안하게 책을 보다 갈 수 있는 곳. 10년 후, 20년 후에 이곳을 찾았던 아이가 어른이 되어 '어렸을 때 엄마 손 잡고 자주 갔던 그림책도서관이 기억나요'라고 말한다면, 그것으로 충분합니다."</p>`,
+        tags: ['그림책도서관', '토박이', '공공 도서관', '어린이', '기억', '일상']
+      },
+      park: {
+        avatar: '兎',
+        name: '박지혜',
+        role: '책방 〈걷는토끼〉 운영 · 한살림 이사 · 독립출판 교류회',
+        chapter: 'flower',
+        chapterName: '3장. 꽃',
+        content: `<p>대학교 교직원으로 일하다가 명예퇴직을 했다. 폐업 위기에 처한 책방을 인수했다. 책방 〈걷는토끼〉. 이름처럼 느린 토끼의 걸음으로, 지역 문화를 잇는다.</p>
+        
+        <p>이전 책방은 관리비 부담이 컸다. 지금은 다른 분들과 공간을 함께 쓰며 관리비가 10분의 1 수준으로 줄었다. 돈에 대한 부담이 확 줄어들자, 마음에 놀라운 변화가 찾아왔다.</p>
+        
+        <p class="highlight-quote">"돈을 벌어야 한다는 강박이 사라지니, 텅 빈 시간이 스트레스가 아닌 여유로 다가왔다. '아무도 안 오면 내가 시간 많고 좋지 뭐.' 이런 마음으로 책을 보고, 나만의 시간을 누린다."</p>
+        
+        <p>'원주 독립출판 교류회'의 멤버다. 한 글자 시리즈 책을 꾸준히 냈다. '실', '강', '씀' 같은 단어를 주제로 글을 모았고, 최근에는 '운동북'이라는 주제로 새로운 책을 만들었다.</p>
+        
+        <p>한살림 이사로 활동하며 또 다른 형태의 지역 사회 활동을 이어간다. 공동육아 어린이집이 계기였다. '소북소북(소소한 북 카페의 소통)' 연대는 원주의 독립 서점들이 모인 모임이다.</p>
+        
+        <p class="highlight-quote">"나는 그저 내가 좋아서 이 공간을 차렸을 뿐입니다. 도서관과는 다른 느낌, 책이 있고 그 책을 편안하게 만날 수 있는 공간. 그저 그것으로 충분합니다."</p>`,
+        tags: ['독립서점', '걷는토끼', '한살림', '협동조합', '독립출판', '느슨한 연대']
+      },
+      kimhr: {
+        avatar: '城',
+        name: '김혜령',
+        role: '원주시 문화예술과 창의도시팀 · 원주 토박이 40년',
+        chapter: 'forest',
+        chapterName: '4장. 숲',
+        content: `<p>원주에서 태어나 40년 넘게 살아온 토박이다. 어린 시절 영화관이 즐비한 거리에서 자랐고, 대학을 졸업한 후 공무원이 되어 여러 부서를 거쳤다. 그리고 2024년, 문화예술과 창의도시팀으로 발령받았다.</p>
+        
+        <p>원주는 2019년 유네스코 문학 창의도시로, 2020년에는 문화체육관광부의 문화도시로 지정되었다. 불과 1년 간격으로, 거의 동시에 국제적이고 국가적인 문화 도시 타이틀을 얻은 것이다. 이런 사례는 전국에서도 찾아보기 힘들다.</p>
+        
+        <p class="highlight-quote">"박경리 선생의 『토지』는 거대한 나무와 같습니다. 하지만 그것만으로는 숲이 되지 않습니다. 시민들이 직접 만든 500여 권의 그림책은 그 나무 주변에 피어난 들꽃과 같습니다. 거대한 나무와 수많은 들꽃이 함께 어우러져, 비로소 원주다움이라는 하나의 숲을 이룹니다."</p>
+        
+        <p>원주만의 특징을 꼽으라면 '열린 마음'이다. 이곳은 외부의 환경 변화나 새로운 사람, 새로운 문화를 경계하지 않는다. 오히려 스펀지처럼 흡수하고 비교적 잘 융화되는 힘을 가지고 있다. 원주는 이제 외지인이 70%다. 토박이가 오히려 소수가 되었다. 그래서 텃세를 부릴 수가 없다.</p>
+        
+        <p class="highlight-quote">"결국 내가 하는 일은 실체 없는 것을 믿고, 다른 이들도 믿게 만드는 과정이다. '문학 창의도시 원주'라는 이름이 단순한 수식어를 넘어, 시민들의 마음에 단단히 뿌리내리는 그날까지."</p>`,
+        tags: ['문학창의도시', '문화도시', '토박이', '열린 마음', '행정', '원주다움']
+      }
+    };
+
+    // Interview card click
+    document.querySelectorAll('.interview-card').forEach(card => {
+      card.addEventListener('click', () => {
+        const person = card.dataset.person;
+        openModal(person);
+      });
+    });
+
+    function openModal(id) {
+      const data = interviewData[id];
+      document.getElementById('modal-avatar').textContent = data.avatar;
+      document.getElementById('modal-name').textContent = data.name;
+      document.getElementById('modal-role').textContent = data.role;
+      
+      const chapterEl = document.getElementById('modal-chapter');
+      chapterEl.textContent = data.chapterName;
+      chapterEl.className = 'modal-chapter ' + data.chapter;
+      
+      document.getElementById('modal-body').innerHTML = data.content;
+      
+      const tagsContainer = document.getElementById('modal-tags');
+      tagsContainer.innerHTML = data.tags.map(tag => `<span class="modal-tag">#${tag}</span>`).join('');
+      
+      document.getElementById('modal').classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal() {
+      document.getElementById('modal').classList.remove('active');
+      document.body.style.overflow = '';
+    }
+
+    // Close modal on overlay click
+    document.getElementById('modal').addEventListener('click', (e) => {
+      if (e.target === e.currentTarget) {
+        closeModal();
+      }
+    });
+
+    // Close modal on ESC key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeModal();
+      }
+    });
+
+    // Smooth scroll for navigation links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function(e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          target.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+          });
+        }
+      });
+    });
+  </script>
+</body>
+</html>
